@@ -6,7 +6,8 @@
   "scripts": {
     "start" : "npm test && set NODE_ENV='prod' && node index.js",
     "dev": "nodemon index.js",
-    "test": "mocha api.test.js --timeout=30000 --exit"
+    "test": "mocha api.test.js --timeout=30000 --exit",
+    "testr" : "export MODE_ENV='exp' && api.test.js --timeout=30000 --exit"
   },
   "author": "Jeel Vachhani",
   "license": "ISC",
