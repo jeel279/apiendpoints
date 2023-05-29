@@ -12,7 +12,6 @@ router.use(bodyParser.urlencoded({extended:false}))
 router.get('/',(req,res)=>{
     res.send("Hello")
 })
-
 const [users,posts,comments] = (process.env.NODE_ENV=="test") ? ['test.users','test.posts','test.comments'] : ['public.users','public.posts','public.comment'];
 
 router.post('/authenticate',async(req,res)=>{
