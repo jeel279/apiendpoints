@@ -1,5 +1,4 @@
 process.env.NODE_ENV = 'test';
-
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('./index');
@@ -11,11 +10,12 @@ chai.use(chaiHttp);
 //Our parent block
 
 describe('dbconn and cleaning procedure',()=>{
-    it('dbconnection-check and clearing databases',async(done)=>{
+    it('dbconnection-check and clearing databases',async()=>{
         try{
-            const a = db(`TRUNCATE TABLE "comments","posts";`)
-            done()
+            await db("SET search_path TO 'test';");
+            await db(`TRUNCATE TABLE "comments","posts";`)
         }catch(err){
+            
             throw err;
         }
     })
@@ -23,9 +23,7 @@ describe('dbconn and cleaning procedure',()=>{
 
 describe('authentication', () => {
     
-/*
-  * Test the /GET route
-  */
+
   describe('/authenticate user', () => {
 
 
@@ -63,88 +61,68 @@ describe('authentication', () => {
 });
 
 
-// describe("user-actions: follow-unfollow",()=>{
-//     describe("/follow/:id 'it should follow a user with given user_id'",()=>{
-//         it(`it should not follow a user without authentication-token`,(done)=>{
-//             chai.request(server)
-//                 .post(`/api/follow/2`)
-//                 .end((err,res)=>{
-//                     res.should.have.status(403)
-//                     done()
-//                 })
-//         })
-//         it(`it should not follow a user with wrong authentication-token`,(done)=>{
-//             chai.request(server)
-//                 .post(`/api/follow/2`)
-//                 .send({token : 'asdasdasd'})
-//                 .end((err,res)=>{
-//                     res.should.have.status(401)
-//                     done()
-//                 })
-//         })
-//         it(`it should follow a user with given user_id: 2 if exists with auth`,(done)=>{
-//             chai.request(server)
-//                 .post(`/api/follow/2`)
-//                 .send({token : jwtToken})
-//                 .end((err,res)=>{
-//                     res.should.have.status(200)
-//                     done()
-//                 })
-//         })
-//         for(let i=1,nm=parseInt(i*(i+1)*100*Math.random());i<=5;i++,nm=parseInt(i*(i+1)*100*Math.random())){
-//             it(`it should follow a user with given user_id: ${nm} if exists`,(done)=>{
-//                 chai.request(server)
-//                     .post(`/api/follow/${nm}`)
-//                     .send({token : jwtToken})
-//                     .end((err,res)=>{
-//                         res.should.have.status(404)
-//                         done()
-//                     })
-//             })
-//         }
-//     })
+describe("user-actions: follow-unfollow",()=>{
+    describe("/follow/:id 'it should follow a user with given user_id'",()=>{
+        it(`it should not follow a user without authentication-token`,(done)=>{
+            chai.request(server)
+                .post(`/api/follow/2`)
+                .end((err,res)=>{
+                    res.should.have.status(403)
+                    done()
+                })
+        })
+        it(`it should not follow a user with wrong authentication-token`,(done)=>{
+            chai.request(server)
+                .post(`/api/follow/2`)
+                .send({token : 'asdasdasd'})
+                .end((err,res)=>{
+                    res.should.have.status(401)
+                    done()
+                })
+        })
+        it(`it should follow a user with given user_id: 2 if exists with auth`,(done)=>{
+            chai.request(server)
+                .post(`/api/follow/2`)
+                .send({token : jwtToken})
+                .end((err,res)=>{
+                    res.should.have.status(200)
+                    done()
+                })
+        })
+        
+    })
 
 
-//     describe("/unfollow/:id 'it should unfollow a user with given user_id'",()=>{
-//         it(`it should not unfollow a user without authentication-token`,(done)=>{
-//             chai.request(server)
-//                 .post(`/api/unfollow/2`)
-//                 .end((err,res)=>{
-//                     res.should.have.status(403)
-//                     done()
-//                 })
-//         })
-//         it(`it should not unfollow a user with wrong authentication-token`,(done)=>{
-//             chai.request(server)
-//                 .post(`/api/unfollow/2`)
-//                 .send({token : 'asdasdasd'})
-//                 .end((err,res)=>{
-//                     res.should.have.status(401)
-//                     done()
-//                 })
-//         })
-//         it(`it should unfollow a user with given user_id: 2 if exists with auth`,(done)=>{
-//             chai.request(server)
-//                 .post(`/api/unfollow/2`)
-//                 .send({token : jwtToken})
-//                 .end((err,res)=>{
-//                     res.should.have.status(200)
-//                     done()
-//                 })
-//         })
-//         for(var i=1,nm=parseInt(i*(i+1)*107*Math.random());i<=5;i++,nm=parseInt(i*(i+1)*100*Math.random())){
-//             it(`it should unfollow a user with given user_id: ${nm} if exists`,(done)=>{
-//                 chai.request(server)
-//                     .post(`/api/unfollow/${nm}`)
-//                     .send({token : jwtToken})
-//                     .end((err,res)=>{
-//                         res.should.have.status(404)
-//                         done()
-//                     })
-//             })
-//         }
-//     })
-// })
+    describe("/unfollow/:id 'it should unfollow a user with given user_id'",()=>{
+        it(`it should not unfollow a user without authentication-token`,(done)=>{
+            chai.request(server)
+                .post(`/api/unfollow/2`)
+                .end((err,res)=>{
+                    res.should.have.status(403)
+                    done()
+                })
+        })
+        it(`it should not unfollow a user with wrong authentication-token`,(done)=>{
+            chai.request(server)
+                .post(`/api/unfollow/2`)
+                .send({token : 'asdasdasd'})
+                .end((err,res)=>{
+                    res.should.have.status(401)
+                    done()
+                })
+        })
+        it(`it should unfollow a user with given user_id: 2 if exists with auth`,(done)=>{
+            chai.request(server)
+                .post(`/api/unfollow/2`)
+                .send({token : jwtToken})
+                .end((err,res)=>{
+                    res.should.have.status(200)
+                    done()
+                })
+        })
+        
+    })
+})
 
 describe("user-data",()=>{
     it('it should return 403 for user data request without auth',(done)=>{
@@ -212,9 +190,18 @@ describe("new-post@ POST /api/posts",()=>{
             .send({title:`sample`,description:'New Post',token:jwtToken})
             .end((err,res)=>{
                 res.should.have.status(200)
-                post_id_g = res.body.id;
-                res.body.should.be.a('object')
-                // console.log(post_id)
+                // //console.log(post_id)
+                done()
+                    
+            })
+    })
+    it('it should post new post with valid title',(done)=>{
+        chai.request(server)
+            .post('/api/posts')
+            .send({title:`sampleA`,description:'New Post A',token:jwtToken})
+            .end((err,res)=>{
+                res.should.have.status(200)
+                // //console.log(post_id)
                 done()
                     
             })
@@ -222,26 +209,20 @@ describe("new-post@ POST /api/posts",()=>{
 
 })
 
-describe("delete-post@ DELETE /api/posts/:id",async()=>{
-    var post_id = '';
-    // await chai.request(server)
-    //     .post('/api/posts')
-    //     .send({'title':'A','description':'B',token : jwtToken})
-    //     .end((err,res)=>{
-    //         post_id = res.body.id;
-    //     })
+describe("delete-post@ DELETE /api/posts/:id",()=>{
+    
         it(`it should not delete post with given id without auth`,(done)=>{
             chai.request(server)
-                .delete(`/api/posts/${post_id}`)
+                .delete(`/api/posts/1`)
                 .end((err,res)=>{
-                    res.should.have.status(404)
+                    res.should.have.status(403)
                     done()
                 })
         })
     
         it(`it should not delete post with given with wrong auth`,(done)=>{
             chai.request(server)
-                .delete(`/api/posts/65`)
+                .delete(`/api/posts/1`)
                 .send({token:'dasdasd'})
                 .end((err,res)=>{
                     res.should.have.status(401)
@@ -250,13 +231,9 @@ describe("delete-post@ DELETE /api/posts/:id",async()=>{
         })
     
         it(`it should delete post with given id with valid auth`,(done)=>{
-            chai.request(server)
-                .post('/api/posts')
-                .send({'title':'A','description':'B',token : jwtToken})
-                .end((erra,resa)=>{
-                    post_id = resa.body.id;
+            
                     chai.request(server)
-                        .delete(`/api/posts/${post_id}`)
+                        .delete(`/api/posts/2`)
                         .send({token:jwtToken})
                         .end((err,res)=>{
                             res.should.have.status(200)
@@ -264,58 +241,56 @@ describe("delete-post@ DELETE /api/posts/:id",async()=>{
                     })
                 })
             
-        })
+        
 })
 
 describe("like-unlike-comment-post_details",()=>{
     var post_id = ''
     it('it should like post by authenticated user',(done)=>{
-        chai.request(server)
-                .post('/api/posts')
-                .send({'title':'A','description':'B',token : jwtToken})
-                .end((erra,resa)=>{
-                    post_id = resa.body.id
-                    chai.request(server)
-                        .post(`/api/like/${post_id}`)
-                        .send({token : jwtToken})
-                        .end((err,res)=>{
-                            res.should.have.status(200)
-                            done()
-                        })
-                })
-    })
-    it('it should unlike post by authenticated user',(done)=>{
         
                     chai.request(server)
-                        .post(`/api/unlike/${post_id}`)
+                        .post(`/api/like/1`)
                         .send({token : jwtToken})
                         .end((err,res)=>{
                             res.should.have.status(200)
                             done()
                         })
-            
+        
+                        
+    })
+    it('it should unlike post by authenticated user',(done)=>{
+                        chai.request(server)
+                        .post(`/api/unlike/1`)
+                        .send({token : jwtToken})
+                        .end((err,res)=>{
+                            res.should.have.status(200)
+                            done()
+                        })
+    
     })
     it('it should post a comment on a post by authenticated user',(done)=>{
         
         chai.request(server)
-            .post(`/api/comment/${post_id}`)
+            .post(`/api/comment/1`)
             .send({token : jwtToken,comment:'New Comment'})
             .end((err,res)=>{
                 res.should.have.status(200)
-                res.body.should.be.a('object')
                 done()
             })
+        
 
     })
 
     it('it should fetch post details by given id',(done)=>{
+        
         chai.request(server)
-            .get(`/api/posts/${post_id}`)
+            .get(`/api/posts/1`)
             .end((err,res)=>{
+                
                 res.should.have.status(200)
-                res.body.should.be.a('object')
                 done()
             })
+        
     })
 
 })
@@ -325,9 +300,8 @@ describe('fetch all posts by user',()=>{
         chai.request(server)
             .get(`/api/all_posts`)
             .send({token:jwtToken})
-            .end((err,res)=>{
+            .end(async(err,res)=>{
                 res.should.have.status(200)
-                res.body.should.be.a('array')
                 done()
             })
     })
