@@ -5,7 +5,7 @@ async function query(sql){
     const credentials = {
       host: 'dpg-chpkkfvdvk4goetan340-a.singapore-postgres.render.com',
           port: 5432,
-          database: 'maindb_3ii5',
+          database: process.env.NODE_ENV == 'test' ? 'test_db' : 'maindb_3ii5',
           user: 'admin',
           password: 'vvJNvPmiccvxp9qT4Br7ymr9JRrpEiWS',
           ssl:true
