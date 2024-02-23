@@ -8,7 +8,7 @@ app.use('/api',api)
 
 
 app.listen(8080,async()=>{
-    console.log("SERVER STARTED")
+    console.log("SERVER STARTED...")
     // const rq = await db(`SELECT * FROM users.users WHERE email='johndoe@mail.com';`)
     // console.log(rq)
 })
